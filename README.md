@@ -28,12 +28,12 @@ When the Post becomes Restricted Content (gets archived) it will get all the Res
 
 The WooCommerce suite enables a wide variety models of product sales. 
 
-In order to use "premium archive content" on your web site, the Memberships Plans need to be tuned to this Plugin's purpose. When setting up your Memberships Plans rules, consider you will want certain Plans to gain access both after the post has become archive, and during it's public.
+In order to use "premium archive content" on your web site, the Memberships Plans need to be tuned to this Plugin's purpose. When setting up your Memberships Plans rules, consider you will want certain Plans to gain access both during while it is public, and after the post has become restricted.
 
-An simplest example Membership Plan setup which would initially restrict access to posts, and then to be extended by this plugin to premium archive functionality, could be one like this:
-- in WordPress Admin zone, go to `WooCommerce` > `Membersips` > `Membership Plans` and select "Add Membership Plan":
-  - add a Plan title
+A simplest example of a Membership Plan setup which sets global access restriction to posts, which is then coupled with this plugin's control of keeping those posts public for a period of time, could be one like this:
+- to create a demo Membership Plan, in WordPress Admin zone go to `WooCommerce` > `Membersips` > `Membership Plans` and select "Add Membership Plan"
+  - enter a Plan title
   - in Plan's `Restricted Content` tab, select "Add New Rule": Type "Posts", Accessible "Immediately"
   - publish the Plan
 
-Using this Plugin, we can now set the period for how long a post is kept public before it becomes premium content. Member using plan will be able to see the post while it's public, and also when it gets archived (promoted to restricted content). 
+With this kind of demo setup, you can now test this plugin's functionality. Using the Plugin, you can first set the number of days for how long a post is kept public. A Member using the demo Plan above, will be able to see the post while it's public, and also have access to it when it gets archived for the general public.
