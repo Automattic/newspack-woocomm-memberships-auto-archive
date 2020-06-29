@@ -88,7 +88,7 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
           label={ __( 'Post is public but will become restricted', 'newspack-woocomm-auto-archive' ) }
         />
         <TextControl
-          label={ __( 'In number of days after published:', 'newspack-woocomm-auto-archive' ) }
+          label={ __( 'Number of days after published:', 'newspack-woocomm-auto-archive' ) }
           onChange={ value => {
             const valueWithMinimum = value >= minDaysToAutoArchive ? value : minDaysToAutoArchive;
             metaUpdated.newspack_woocomm_days_to_auto_archive = valueWithMinimum;
