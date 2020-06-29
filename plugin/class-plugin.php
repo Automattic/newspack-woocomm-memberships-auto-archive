@@ -103,6 +103,7 @@ class Plugin {
 	 */
 	public function auto_archive_the_post() {
 		// Do not auto-archive when in Admin area or for Admin Referer Requests, because they will change the Post Editor state.
+
 		if ( is_admin() || $this->is_referer_admin( admin_url(), wp_get_referer() ) ) {
 			return;
 		}
@@ -115,6 +116,10 @@ class Plugin {
 		}
 
 		$is_set_auto_archive = (bool) get_post_meta( $post->ID, 'newspack_woocomm_post_auto_archive', true );
+
+		// Useful for Atomic env, where cache persists for a little while.
+		clean_post_cache( $post );
+
 		if ( ! $is_set_auto_archive ) {
 			return;
 		}
