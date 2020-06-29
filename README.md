@@ -18,6 +18,8 @@ To get set up for development, run `npm install && npm start`.
 
 This plugin adds a simple Pannel to the Block Editor document settings side bar.
 
+![image](https://user-images.githubusercontent.com/29167323/86023321-d2219e00-ba2b-11ea-9bc8-a351a9a6332e.png)
+
 When the feature is turned on, it first sets public access to the Post. After the defined number of days, it automatically turns the Post to restricted content. 
 
 When the Post becomes Restricted Content (gets archived) it will get all the Restriction Rules defined in your Memberships Plans.
