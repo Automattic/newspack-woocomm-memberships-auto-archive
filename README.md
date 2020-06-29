@@ -30,10 +30,10 @@ The WooCommerce suite enables a wide variety models of product sales.
 
 In order to use "premium archive content" on your web site, the Memberships Plans need to be tuned to this Plugin's purpose. When setting up your Memberships Plans rules, consider you will want certain Plans to gain access both after the post has become archive, and during it's public.
 
-An simplest example Membership Plan setup to work as a automatic premium archive could be one like this:
+An simplest example Membership Plan setup which would initially restrict access to posts, and then to be extended by this plugin to premium archive functionality, could be one like this:
 - in WordPress Admin zone, go to `WooCommerce` > `Membersips` > `Membership Plans` and select "Add Membership Plan":
   - add a Plan title
   - in Plan's `Restricted Content` tab, select "Add New Rule": Type "Posts", Accessible "Immediately"
   - publish the Plan
 
-Member using plan will be able to see the post while it's public, and also when it gets archived (promoted to restricted content). 
+Using this Plugin, we can now set the period for how long a post is kept public before it becomes premium content. Member using plan will be able to see the post while it's public, and also when it gets archived (promoted to restricted content). 
