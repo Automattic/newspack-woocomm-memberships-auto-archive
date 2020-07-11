@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Newspack WooCommerce Memberships Auto-archive
  * Description: Keeps a post public for a number of days, after which it automatically becomes restricted content.
- * Version: 0.1
+ * Version: 0.2
  * Author: Automattic
  * Author URI: https://newspack.blog/
  * License: GPL2
