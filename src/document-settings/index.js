@@ -18,7 +18,7 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
 
     const { postPublishDate, isCleanNewPost, onMetaChange } = props;
     const minDaysToAutoArchive = this.getMinDaysToAutoArchive( postPublishDate );
-    var metaUpdated = { ...props.meta };
+    let metaUpdated = { ...props.meta };
 
     // The default for new posts is: Auto Archive is on, and number of days isAUTO_ARCHIVE_DAYS_DEFAULT.
     if ( isCleanNewPost ) {
@@ -45,8 +45,8 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
     const { isSavingPost, postPublishDateEdited, onMetaChange } = this.props;
     const { meta } = this.state;
     const minDaysToAutoArchiveEdited = this.getMinDaysToAutoArchive( postPublishDateEdited );
-    var { hasRunOnceDuringSaving } = this.state;
-    var metaUpdated = { ...meta };
+    let { hasRunOnceDuringSaving } = this.state;
+    let metaUpdated = { ...meta };
 
     if ( ! isSavingPost && hasRunOnceDuringSaving ) {
       hasRunOnceDuringSaving = false;
@@ -90,7 +90,7 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
     const { postPublishDate, onMetaChange, isSavingPost } = this.props;
     const { meta } = this.state;
     const minDaysToAutoArchive = this.getMinDaysToAutoArchive( postPublishDate );
-    var metaUpdated = { ...meta };
+    let metaUpdated = { ...meta };
 
     return (
       <PluginDocumentSettingPanel
