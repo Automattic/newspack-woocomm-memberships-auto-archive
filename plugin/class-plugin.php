@@ -113,10 +113,6 @@ class Plugin {
 		}
 
 		$is_set_auto_archive = (bool) get_post_meta( $post->ID, 'newspack_woocomm_post_auto_archive', true );
-
-		// Useful for Atomic env, where cache persists for a little while.
-		clean_post_cache( $post );
-
 		if ( ! $is_set_auto_archive ) {
 			return;
 		}
