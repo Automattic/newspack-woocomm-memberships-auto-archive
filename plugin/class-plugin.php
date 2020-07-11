@@ -102,11 +102,6 @@ class Plugin {
 	 * WooComm Memberships Restriction Rules are enforced for this post.
 	 */
 	public function auto_archive_the_post() {
-		// Do not auto-archive when in Admin area or for Admin Referer Requests, because they will change the Post Editor state.
-		if ( is_admin() || $this->is_referer_admin( admin_url(), wp_get_referer() ) ) {
-			return;
-		}
-
 		global $post;
 
 		// Only archive for front end viewing of posts.
@@ -167,27 +162,6 @@ class Plugin {
 		$message_code = \WC_Memberships_User_Messages::get_message_code_shorthand_by_post_type( $post );
 
 		$this->woocomm_memberships__update_custom_message( $post->ID, array( $message_code ) );
-	}
-
-	/**
-	 * Checks if WP Admin zone is HTTP_REFERER.
-	 *
-	 * @param string $admin_url
-	 * @param string $referer
-	 *
-	 * @return bool
-	 */
-	private function is_referer_admin( $admin_url, $referer ) {
-		if ( ! $referer ) {
-			return false;
-		}
-
-		$admin_url = strtolower( $admin_url );  // e.g. https://pub.com/wp-admin/
-		$referer  = strtolower( $referer );     // e.g. https://pub.com/wp-admin/post.php?post=82370&action=edit
-		$admin_no_schema = substr( $admin_url, strpos( $admin_url, '://' ) + 3 );
-		$referer_no_schema = substr( $referer, strpos( $referer, '://' ) + 3 );
-
-		return $admin_no_schema == substr( $referer_no_schema, 0, strlen( $admin_no_schema ) );
 	}
 
 	/**
