@@ -131,8 +131,6 @@ class Plugin {
 		wc_memberships()->get_restrictions_instance()->unset_content_public( $post );
 
 		$this->restrictions_update_data( $post );
-
-		wp_cache_flush();
 	}
 
 	/**
@@ -234,5 +232,4 @@ class Plugin {
 	public function remove_auto_archive_on_save_post( $post_id ) {
 		remove_action( 'wp', [ $this, 'auto_archive_the_post' ], 0 );
 	}
-
 }
