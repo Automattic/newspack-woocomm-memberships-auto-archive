@@ -50,7 +50,7 @@
     "lint:scss:staged": "stylelint --syntax scss",
     "build": "calypso-build --config='./webpack.config.js'",
     "clean": "rm -rf dist/",
-    "release:archive": "mkdir -p release && zip -r release/newspack-popups.zip . -x node_modules/\\* .git/\\* .github/\\* .gitignore .DS_Store",
+    "release:archive": "mkdir -p release && zip -r release/newspack-woocomm-memberships-auto-archive.zip . -x node_modules/\\* .git/\\* .github/\\* .gitignore .DS_Store",
     "release": "npm run build && npm run semantic-release"
   },
   "lint-staged": {
@@ -66,14 +66,14 @@
       [
         "semantic-release-version-bump",
         {
-          "files": "newspack-popups.php",
+          "files": "newspack-woocomm-memberships-auto-archive.php",
           "callback": "npm run release:archive"
         }
       ],
       {
         "path": "@semantic-release/git",
         "assets": [
-          "newspack-popups.php",
+          "newspack-woocomm-memberships-auto-archive.php",
           "package.json",
           "package-lock.json",
           "CHANGELOG.md"
@@ -96,8 +96,8 @@
         {
           "assets": [
             {
-              "path": "./release/newspack-popups.zip",
-              "label": "newspack-popups.zip"
+              "path": "./release/newspack-woocomm-memberships-auto-archive.zip",
+              "label": "newspack-woocomm-memberships-auto-archive.zip"
             }
           ]
         }
