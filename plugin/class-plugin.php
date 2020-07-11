@@ -103,9 +103,12 @@ class Plugin {
 	 */
 	public function auto_archive_the_post() {
 		global $post;
+		if ( ! $post ) {
+			return;
+		}
 
-		// Only archive for front end viewing of posts.
-		if ( 'post' !== $post->post_type || 'publish' !== $post->post_status || is_admin() ) {
+		// Only archive public posts.
+		if ( 'post' !== $post->post_type || 'publish' !== $post->post_status ) {
 			return;
 		}
 
