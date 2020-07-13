@@ -9,6 +9,11 @@ import { registerPlugin } from '@wordpress/plugins';
 import { ToggleControl, TextControl } from '@wordpress/components';
 import { Component } from '@wordpress/element';
 
+/**
+ * Internal dependencies
+ */
+import { toggleForcePublicCheckbox } from "./utils";
+
 const AUTO_ARCHIVE_DAYS_DEFAULT = 7;
 
 class WooCommPostAutoArchiveSettingsPanel extends Component {
@@ -37,7 +42,7 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
     };
     onMetaChange( metaUpdated );
     if ( metaUpdated.newspack_woocomm_post_auto_archive ) {
-      newspack_woocomm_auto_archive_toggleForcePublicCheckbox( metaUpdated.newspack_woocomm_post_auto_archive );
+      toggleForcePublicCheckbox( metaUpdated.newspack_woocomm_post_auto_archive );
     }
   }
 
@@ -66,7 +71,7 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
           metaUpdated.newspack_woocomm_days_to_auto_archive = minDaysToAutoArchiveEdited;
           this.setState( { meta: metaUpdated } );
           onMetaChange( metaUpdated );
-          newspack_woocomm_auto_archive_toggleForcePublicCheckbox( false );
+          toggleForcePublicCheckbox( false );
         }
       } );
     }
@@ -103,7 +108,7 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
             metaUpdated.newspack_woocomm_post_auto_archive = toggled;
             this.setState( { meta: metaUpdated } );
             onMetaChange( metaUpdated );
-            newspack_woocomm_auto_archive_toggleForcePublicCheckbox( metaUpdated.newspack_woocomm_post_auto_archive );
+            toggleForcePublicCheckbox( metaUpdated.newspack_woocomm_post_auto_archive );
           } }
           checked={ metaUpdated.newspack_woocomm_post_auto_archive }
           label={ __( 'Post is public but will become restricted', 'newspack-woocomm-auto-archive' ) }

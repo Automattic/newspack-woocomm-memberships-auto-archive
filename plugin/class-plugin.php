@@ -88,13 +88,6 @@ class Plugin {
 			filemtime( dirname( NEWSPACK_WOOCOMM_MEMBERSHIPS_AUTO_ARCHIVE_PLUGIN_FILE ) . '/dist/documentSettings.js' ),
 			true
 		);
-		\wp_enqueue_script(
-			'newspack-woocomm-memberships-enable-public-post',
-			plugins_url( 'src/newspack_woocomm_auto_archive_integrations.js', NEWSPACK_WOOCOMM_MEMBERSHIPS_AUTO_ARCHIVE_PLUGIN_FILE ),
-			[],
-			filemtime( dirname( NEWSPACK_WOOCOMM_MEMBERSHIPS_AUTO_ARCHIVE_PLUGIN_FILE ) . '/src/newspack_woocomm_auto_archive_integrations.js' ),
-			true
-		);
 	}
 
 	/**
