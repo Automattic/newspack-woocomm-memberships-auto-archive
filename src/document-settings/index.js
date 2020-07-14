@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { withSelect, withDispatch, subscribe } from '@wordpress/data';
+import { withSelect, withDispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { registerPlugin } from '@wordpress/plugins';
@@ -23,61 +23,52 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
 
     const { postPublishDate, isCleanNewPost, onMetaChange } = props;
     const minDaysToAutoArchive = this.getMinDaysToAutoArchive( postPublishDate );
-    let metaUpdated = { ...props.meta };
+    let metaPayload = { ...props.meta };
 
     // The default for new posts is: Auto Archive is on, and number of days isAUTO_ARCHIVE_DAYS_DEFAULT.
     if ( isCleanNewPost ) {
-      metaUpdated.newspack_woocomm_post_auto_archive = true;
-      metaUpdated.newspack_woocomm_days_to_auto_archive = AUTO_ARCHIVE_DAYS_DEFAULT;
+      metaPayload.newspack_woocomm_post_auto_archive = true;
+      metaPayload.newspack_woocomm_days_to_auto_archive = AUTO_ARCHIVE_DAYS_DEFAULT;
     } else {
-      metaUpdated.newspack_woocomm_post_auto_archive = !! metaUpdated.newspack_woocomm_post_auto_archive;
-      metaUpdated.newspack_woocomm_days_to_auto_archive = metaUpdated.newspack_woocomm_post_auto_archive
-        ? metaUpdated.newspack_woocomm_days_to_auto_archive
+      metaPayload.newspack_woocomm_post_auto_archive = !! metaPayload.newspack_woocomm_post_auto_archive;
+      metaPayload.newspack_woocomm_days_to_auto_archive = metaPayload.newspack_woocomm_post_auto_archive
+        ? metaPayload.newspack_woocomm_days_to_auto_archive
         : ( AUTO_ARCHIVE_DAYS_DEFAULT > minDaysToAutoArchive ? AUTO_ARCHIVE_DAYS_DEFAULT : minDaysToAutoArchive );
     }
 
     this.state = {
-      meta: metaUpdated,
       hasRunOnceDuringSaving: false,
     };
-    onMetaChange( metaUpdated );
-    if ( metaUpdated.newspack_woocomm_post_auto_archive ) {
-      toggleForcePublicCheckbox( metaUpdated.newspack_woocomm_post_auto_archive );
+    onMetaChange( metaPayload );
+    if ( metaPayload.newspack_woocomm_post_auto_archive ) {
+      toggleForcePublicCheckbox( metaPayload.newspack_woocomm_post_auto_archive );
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const { isSavingPost, postPublishDateEdited, onMetaChange } = this.props;
-    const { meta } = this.state;
+    const { isSavingPost, postPublishDateEdited, onMetaChange, meta } = this.props;
+    const { hasRunOnceDuringSaving } = this.state;
     const minDaysToAutoArchiveEdited = this.getMinDaysToAutoArchive( postPublishDateEdited );
-    let { hasRunOnceDuringSaving } = this.state;
-    let metaUpdated = { ...meta };
 
     if ( ! isSavingPost && hasRunOnceDuringSaving ) {
-      hasRunOnceDuringSaving = false;
+      this.setState( { hasRunOnceDuringSaving: false } );
     }
 
     // Validate when Saving -- if Post is being saved with an Auto Archive date in the past, the backend will have immediately
     // updated the Post and invalidated the Post Editor, so in that case update the frontend meta, and notify the editor.
     if ( isSavingPost && ! hasRunOnceDuringSaving ) {
-      hasRunOnceDuringSaving = true;
-      subscribe( () => {
-        if (
-          metaUpdated.newspack_woocomm_post_auto_archive &&
-          metaUpdated.newspack_woocomm_days_to_auto_archive < minDaysToAutoArchiveEdited
-        ) {
-          alert( __( 'Warning, Auto Archive was set to a date which has already passed. This Post was now updated to be Restricted to Members only.' ) )
-          metaUpdated.newspack_woocomm_post_auto_archive = false;
-          metaUpdated.newspack_woocomm_days_to_auto_archive = minDaysToAutoArchiveEdited;
-          this.setState( { meta: metaUpdated } );
-          onMetaChange( metaUpdated );
-          toggleForcePublicCheckbox( false );
-        }
-      } );
-    }
-
-    if ( hasRunOnceDuringSaving !== this.state.hasRunOnceDuringSaving ) {
-      this.setState( { hasRunOnceDuringSaving } );
+      this.setState( { hasRunOnceDuringSaving: true } );
+      if (
+        meta.newspack_woocomm_post_auto_archive &&
+        meta.newspack_woocomm_days_to_auto_archive < minDaysToAutoArchiveEdited
+      ) {
+        alert( __( 'Warning, Auto Archive was set to a date which has already passed. This Post was now updated to be Restricted to Members only.' ) )
+        onMetaChange( {
+          newspack_woocomm_post_auto_archive: false,
+          newspack_woocomm_days_to_auto_archive: minDaysToAutoArchiveEdited,
+        } );
+        toggleForcePublicCheckbox( false );
+      }
     }
   }
 
@@ -92,10 +83,8 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
   }
 
   render() {
-    const { postPublishDate, onMetaChange, isSavingPost } = this.props;
-    const { meta } = this.state;
+    const { postPublishDate, onMetaChange, meta } = this.props;
     const minDaysToAutoArchive = this.getMinDaysToAutoArchive( postPublishDate );
-    let metaUpdated = { ...meta };
 
     return (
       <PluginDocumentSettingPanel
@@ -103,25 +92,20 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
         title={ __( 'Newspack Auto Archive', 'newspack-woocomm-auto-archive' ) }
       >
         <ToggleControl
-          checked={ metaUpdated.newspack_woocomm_post_auto_archive }
-          onChange={ toggled => {
-            metaUpdated.newspack_woocomm_post_auto_archive = toggled;
-            this.setState( { meta: metaUpdated } );
-            onMetaChange( metaUpdated );
-            toggleForcePublicCheckbox( metaUpdated.newspack_woocomm_post_auto_archive );
-          } }
-          checked={ metaUpdated.newspack_woocomm_post_auto_archive }
           label={ __( 'Post is public but will become restricted', 'newspack-woocomm-auto-archive' ) }
+          checked={ meta.newspack_woocomm_post_auto_archive }
+          onChange={ toggled => {
+            onMetaChange( { newspack_woocomm_post_auto_archive: toggled } );
+            toggleForcePublicCheckbox( toggled );
+          } }
         />
         <TextControl
           label={ __( 'Number of days after published:', 'newspack-woocomm-auto-archive' ) }
-          onChange={ value => {
-            metaUpdated.newspack_woocomm_days_to_auto_archive = value < minDaysToAutoArchive ? minDaysToAutoArchive : value;
-            this.setState( { meta: metaUpdated } );
-            onMetaChange( metaUpdated );
-          } }
-          value={ metaUpdated.newspack_woocomm_days_to_auto_archive }
           type="number"
+          value={ meta.newspack_woocomm_days_to_auto_archive }
+          onChange={ value => {
+            onMetaChange( { newspack_woocomm_days_to_auto_archive: ( value < minDaysToAutoArchive ? minDaysToAutoArchive : value ) } );
+          } }
         />
       </PluginDocumentSettingPanel>
     );
