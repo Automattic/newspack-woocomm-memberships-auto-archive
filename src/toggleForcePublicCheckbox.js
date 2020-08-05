@@ -4,9 +4,11 @@
 
 // Toggles the WooComm's Post Editor > Memberships > Force Post Public checkbox.
 export function toggleForcePublicCheckbox( checked ) {
-  const element = document.getElementById( "_wc_memberships_force_public" );
-  element.checked = checked;
-  toggleHideContentRestrictionsDiv( element );
+  window.onload = () => {
+    const element = document.getElementById( "_wc_memberships_force_public" );
+    element.checked = checked;
+    toggleHideContentRestrictionsDiv( element );
+  };
 };
 
 // Hides or shows WooComm's Post Editor > Memberships div when checkbox is toggled.
