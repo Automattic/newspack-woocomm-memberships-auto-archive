@@ -8,6 +8,7 @@ import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { registerPlugin } from '@wordpress/plugins';
 import { ToggleControl, TextControl } from '@wordpress/components';
 import { Component } from '@wordpress/element';
+import domReady from '@wordpress/dom-ready';
 
 /**
  * Internal dependencies
@@ -41,7 +42,9 @@ class WooCommPostAutoArchiveSettingsPanel extends Component {
     };
     onMetaChange( metaPayload );
     if ( metaPayload.newspack_woocomm_post_auto_archive ) {
-      toggleForcePublicCheckbox( metaPayload.newspack_woocomm_post_auto_archive );
+        domReady( function() {
+          toggleForcePublicCheckbox( metaPayload.newspack_woocomm_post_auto_archive );
+        } );
     }
   }
 

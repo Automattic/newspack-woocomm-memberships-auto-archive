@@ -29,7 +29,6 @@ class Plugin {
 		add_action( 'init', [ $this, 'register_meta' ] );
 		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_block_editor_assets' ] );
 		add_action( 'wp', [ $this, 'auto_archive_the_post' ], 0 );
-		add_action( 'save_post', [ $this, 'remove_auto_archive_on_save_post' ] );
 	}
 
 	/**
@@ -116,6 +115,13 @@ class Plugin {
 		$date_now                   = new \DateTime();
 
 		if ( $date_now < $date_when_post_is_archived ) {
+
+			// Here check and set the `_wc_memberships_force_public` WooComm flag, because there's a chance that it wasn't set:
+			// - only Administrator users get the WC "Memberships" meta box available/visible at the bottom of the Post Editor.
+			//   In case the user was not an Administrator, it will therefore not be checked. But for Auto-Archive to work well
+			//   for all the User roles that get to edit posts, the checkbox does need to be set.
+			wc_memberships()->get_restrictions_instance()->set_content_public( $post );
+
 			return;
 		}
 
@@ -211,18 +217,5 @@ class Plugin {
 		) );
 
 		return $content_restriction_rules;
-	}
-
-	/**
-	 * Disable auto-archive when post is being saved.
-	 *
-	 * Since we're hooking into the 'wp' action to integrate with WooCommerce Memberships, we need to unset it for the Post Editor
-	 * or otherwise the auto-archive hook could (depending on 'number of days to auto-archive') go off when the post is being
-	 * saved, and invalidate the Post Editor state .
-	 *
-	 * @param int $post_id
-	 */
-	public function remove_auto_archive_on_save_post( $post_id ) {
-		remove_action( 'wp', [ $this, 'auto_archive_the_post' ], 0 );
 	}
 }
