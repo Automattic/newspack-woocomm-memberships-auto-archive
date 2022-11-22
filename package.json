@@ -4,7 +4,7 @@
   "main": "Gruntfile.js",
   "author": "Automattic",
   "devDependencies": {
-    "@automattic/calypso-build": "^5.1.0",
+    "@automattic/calypso-build": "^10.0.0",
     "@babel/core": "^7.6.4",
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
