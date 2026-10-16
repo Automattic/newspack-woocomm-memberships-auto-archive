@@ -133,32 +133,14 @@ class Plugin {
 	}
 
 	/**
-	 * Update the $post with current restriction rules.
+	 * Reset the post's restriction message to the plan default.
 	 *
-	 * Based on \WC_Memberships_Meta_Box_Post_Memberships_Data::update_data.
+	 * The plan's content restriction rules need no per-post write: they apply to the post as soon as
+	 * the public flag is gone.
 	 *
 	 * @param \WP_Post $post
 	 */
 	private function restrictions_update_data( $post ) {
-		$content_restriction_rules = $this->woocomm_memberships__get_content_restriction_rules( $post );
-
-		$posted_data = [];
-		foreach ( $content_restriction_rules as $rule_hash => $content_restriction_rule ) {
-			if ( '__INDEX__' == $rule_hash ) {
-				continue;
-			}
-			$posted_data[ '_content_restriction_rules' ][ $rule_hash ] = [
-				'membership_plan_id' => $content_restriction_rule->get_membership_plan_id(),
-				'id'                 => $content_restriction_rule->get_id(),
-				'remove'             => '',
-			];
-		}
-
-		require_once( wc_memberships()->get_plugin_path() . '/includes/admin/class-wc-memberships-admin-membership-plan-rules.php' );
-		\WC_Memberships_Admin_Membership_Plan_Rules::save_rules( $posted_data, $post->ID, array( 'content_restriction' ), 'post' );
-
-		wc_memberships()->get_restrictions_instance()->unset_content_public( $post );
-
 		$message_code = \WC_Memberships_User_Messages::get_message_code_shorthand_by_post_type( $post );
 
 		$this->woocomm_memberships__update_custom_message( $post->ID, array( $message_code ) );
@@ -189,33 +171,5 @@ class Plugin {
 
 			wc_memberships_set_content_meta( $post_id, "_wc_memberships_use_custom_{$message_code}", $use_custom );
 		}
-	}
-
-	/**
-	 * Gets WooComm Memberships Restriction Rules.
-	 *
-	 * Based on \WC_Memberships_Meta_Box_Post_Memberships_Data::get_content_restriction_rules.
-	 *
-	 * @param \WP_Post $post
-	 *
-	 * @return array
-	 */
-	private function woocomm_memberships__get_content_restriction_rules( $post ){
-		$content_restriction_rules = array();
-
-		if ( ! ( $post instanceof \WP_Post ) ) {
-			return $content_restriction_rules;
-		}
-
-		$content_restriction_rules = wc_memberships()->get_rules_instance()->get_rules( array(
-			'rule_type'         => 'content_restriction',
-			'object_id'         => $post->ID,
-			'content_type'      => 'post_type',
-			'content_type_name' => $post->post_type,
-			'exclude_inherited' => false,
-			'plan_status'       => 'any',
-		) );
-
-		return $content_restriction_rules;
 	}
 }
